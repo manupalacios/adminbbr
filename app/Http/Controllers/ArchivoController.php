@@ -2,22 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Liquidacion;
-use App\Http\Requests\LiquidacionRequest;
+use App\Models\Archivo;
+use App\Http\Requests\ArchivoRequest;
 use Smalot\PdfParser\Parser;
 use Illuminate\Support\Facades\Storage;
 
-class LiquidacionController extends Controller
+class ArchivoController extends Controller
 {
     /**
      * Display a listing of the resource.
      * 
-     * @param bool $saved Si una liquidacion fue guardada será true
+     * @param bool $saved Si un archivo fue guardada será true
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
-        return view('liquidacion.index');
+        return view('archivo.index');
     }
 
     /**
@@ -27,7 +27,7 @@ class LiquidacionController extends Controller
      */
     public function create()
     {
-        return view('liquidacion.create');
+        return view('archivo.create');
     }
 
     /**
@@ -36,7 +36,7 @@ class LiquidacionController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(LiquidacionRequest $request)
+    public function store(ArchivoRequest $request)
     {
         $tipo = $this->getTipoToString($request->tipo);
         $grupo = 'planta';
@@ -53,17 +53,20 @@ class LiquidacionController extends Controller
             'numero' => $numero
         );
 
-        $liquidacion = Liquidacion::where($where)->first();
+        $archivo = Archivo::where($where)->first();
 
-        if (!$request->has('sobreescribir') && !empty($liquidacion) && $liquidacion->exists) {
+        if (!$request->has('sobreescribir') && !empty($archivo) && $archivo->exists) {
             $request->session()->flash('status', 'Ya existe un archivo para estos parámetros. ¿Desea sobrescribirlo?');
             return redirect()->back()->withInput();
         }
 
+        $path = $tipo.'/'.$grupo.'/'.$nivel.'/'.$request->anio.'/'.$request->mes.'/'.$numero;
+
         if ($request->has('sobreescribir') && $request->sobreescribir) {
-            $archivo = Liquidacion::where($where)->update(['archivo' => $file->getClientOriginalName()]);
+            Storage::disk('liquidaciones')->delete($path.'/'.$archivo->archivo);
+            $archivo = Archivo::where($where)->update(['archivo' => $file->getClientOriginalName()]);
         } else {
-            $archivo = Liquidacion::create([
+            $archivo = Archivo::create([
                 'tipo_id' => $request->tipo,
                 'grupo_id' => $request->grupo,
                 'nivel_id' => $request->nivel,
@@ -74,21 +77,20 @@ class LiquidacionController extends Controller
             ]);
         }
 
-        $path = $tipo.'/'.$grupo.'/'.$nivel.'/'.$request->anio.'/'.$request->mes.'/'.$numero;
         $path = $file->storeAs($path, $file->getClientOriginalName(),'liquidaciones');
 
         $request->session()->flash('status', 'El archivo se ha agregado correctamente');
 
-        return redirect()->route('liquidacion.index');
+        return redirect()->route('archivo.index');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Liquidacion  $liquidacion
+     * @param  \App\Models\Archivo  $archivo
      * @return \Illuminate\Http\Response
      */
-    public function show(Liquidacion $liquidacion)
+    public function show(Archivo $archivo)
     {
         //
     }
@@ -96,10 +98,10 @@ class LiquidacionController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Liquidacion  $liquidacion
+     * @param  \App\Models\Archivo  $archivo
      * @return \Illuminate\Http\Response
      */
-    public function edit(Liquidacion $liquidacion)
+    public function edit(Archivo $archivo)
     {
         //
     }
@@ -108,10 +110,10 @@ class LiquidacionController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Liquidacion  $liquidacion
+     * @param  \App\Models\Archivo  $archivo
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Liquidacion $liquidacion)
+    public function update(Request $request, Archivo $archivo)
     {
         //
     }
@@ -119,18 +121,18 @@ class LiquidacionController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Liquidacion  $liquidacion
+     * @param  \App\Models\Archivo  $archivo
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Liquidacion $liquidacion)
+    public function destroy(Archivo $archivo)
     {
         //
     }
 
     /**
-     * Devuelve un string del tipo de liquidacion
+     * Devuelve un string del tipo de archivo
      * 
-     * @param  integer $tipo Id del tipo de liquidacion 1 = normal, 2 = adicional, 3 = sac
+     * @param  integer $tipo Id del tipo de archivo 1 = normal, 2 = adicional, 3 = sac
      * @return string       Tipo en string
      */
     private function getTipoToString($tipo)
@@ -150,28 +152,28 @@ class LiquidacionController extends Controller
     }
 
     /**
-     * Devuelve un string del tipo de liquidacion
+     * Devuelve un string del tipo de archivo
      * 
-     * @param  integer $nivel Id del nivel de liquidacion 0 = sin_nivel, 1 = inicial, 2 = primario, 3 = medio, 4 = superior
+     * @param  integer $nivel Id del nivel de archivo 0 = sin_nivel, 1 = inicial, 2 = primario, 3 = medio, 4 = superior
      * @return string       Nivel en string en snake case y lower case
      */
     private function getNivelToString($nivel)
     {
         switch ($nivel) {
             case 0:
-                $nivel = "sin_nivel";
+                $nivel = "sin";
                 break;
             case 1:
-                $nivel = "inicial";
+                $nivel = "ini";
                 break;
             case 2:
-                $nivel = "primario";
+                $nivel = "pri";
                 break;
             case 3:
-                $nivel = "medio";
+                $nivel = "med";
                 break;
             case 4:
-                $nivel = "superior";
+                $nivel = "sup";
                 break;
         }
         return $nivel;

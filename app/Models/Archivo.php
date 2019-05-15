@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Liquidacion extends Model
+class Archivo extends Model
 {
 	/**
      * Indicates if the model should be timestamped.

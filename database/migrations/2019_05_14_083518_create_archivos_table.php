@@ -20,7 +20,7 @@ class CreateArchivosTable extends Migration
             $table->unsignedInteger('anio')->nullable(false);
             $table->unsignedInteger('mes')->nullable(false);
             $table->unsignedInteger('numero')->nullable(false);
-            $table->string('archivo')->nullable(false);
+            $table->string('archivo', 150)->nullable(false);
 
             $table->primary(['tipo_id', 'grupo_id', 'nivel_id', 'anio', 'mes', 'numero']);
         });

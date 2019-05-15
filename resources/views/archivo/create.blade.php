@@ -6,10 +6,10 @@
 	
 	<h3>Subir liquidación</h3>
 	<div>
-		<form action="{{ route('liquidacion.store') }}" method="POST" class="form-horizontal" enctype="multipart/form-data">
+		<form action="{{ route('archivo.store') }}" method="POST" class="form-horizontal" enctype="multipart/form-data">
 			{{ csrf_field() }}
 
-			@include('liquidacion.fields')
+			@include('archivo.fields')
 
 			@if(Session::has('status'))
 				<div>
