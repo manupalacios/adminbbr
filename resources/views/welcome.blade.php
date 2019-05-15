@@ -74,6 +74,7 @@
                         <a href="{{ route('login') }}">Login</a>
                     @endauth
                 @endif
+                <a href="{{ route('liquidacion.create') }}">Subir liquidaciones</a>
             </div>
 
             <div class="content">
