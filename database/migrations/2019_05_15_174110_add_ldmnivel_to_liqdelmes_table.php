@@ -14,7 +14,7 @@ class AddLdmnivelToLiqdelmesTable extends Migration
     public function up()
     {
         Schema::table('liqdelmes', function (Blueprint $table) {
-            $table->integer('LDMNivel', 4)->default(0)->after('LDMNro');
+            $table->unsignedSmallInteger('LDMNivel')->nullable(false)->default(0)->after('LDMNro');
         });
     }
 

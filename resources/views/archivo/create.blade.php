@@ -3,8 +3,8 @@
 @section('titleHead', 'Subir liquidacion')
 
 @section('content')
-	
-	<h3>Subir liquidación</h3>
+
+	<h3>Subir archivo</h3>
 	<div>
 		<form action="{{ route('archivo.store') }}" method="POST" class="form-horizontal" enctype="multipart/form-data">
 			{{ csrf_field() }}

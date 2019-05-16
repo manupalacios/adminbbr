@@ -1,5 +1,5 @@
 <div class="{{ $errors->has('anio') ? ' has-error' : '' }}">
-	<label for="anio">Año (*)</label>
+	<label for="anio">Año *</label>
 	<input type="text" name="anio" id="anio" maxlength="4" value="{{ (!empty(old('anio'))) ? old('anio') : '' }}" required>
 	@if ($errors->has('anio'))
         <span class="help-block">
@@ -8,7 +8,7 @@
     @endif
 </div>
 <div class="{{ $errors->has('mes') ? ' has-error' : '' }}">
-	<label for="mes">Mes (*)</label>
+	<label for="mes">Mes *</label>
 	<select name="mes" id="mes" required>
 		<option value="1" {{ (!empty(old('mes')) && old('mes') == 1) ? 'selected' : '' }}>Enero</option>
 		<option value="2" {{ (!empty(old('mes')) && old('mes') == 2) ? 'selected' : '' }}>Febrero</option>
@@ -29,23 +29,8 @@
         </span>
     @endif
 </div>
-<div class="{{ $errors->has('nivel') ? ' has-error' : '' }}">
-	<label for="nivel">Nivel (*)</label>
-	<select name="nivel" id="nivel" required>
-		<option value="0" {{ (!empty(old('nivel')) && old('nivel') == 0) ? 'selected' : '' }}>Sin nivel</option>
-		<option value="1" {{ (!empty(old('nivel')) && old('nivel') == 1) ? 'selected' : '' }}>Inicial</option>
-		<option value="2" {{ (!empty(old('nivel')) && old('nivel') == 2) ? 'selected' : '' }}>Primario</option>
-		<option value="3" {{ (!empty(old('nivel')) && old('nivel') == 3) ? 'selected' : '' }}>Medio</option>
-		<option value="4" {{ (!empty(old('nivel')) && old('nivel') == 4) ? 'selected' : '' }}>Superior</option>
-	</select>
-	@if ($errors->has('nivel'))
-        <span class="help-block">
-            <strong>{{ $errors->first('nivel') }}</strong>
-        </span>
-    @endif
-</div>
 <div class="{{ $errors->has('tipo') ? ' has-error' : '' }}">
-	<label for="tipo">Tipo (*)</label>
+	<label for="tipo">Tipo *</label>
 	<select name="tipo" id="tipo" required>
 		<option value="1" {{ (!empty(old('tipo')) && old('tipo') == 1) ? 'selected' : '' }}>Normal</option>
 		<option value="2" {{ (!empty(old('tipo')) && old('tipo') == 2) ? 'selected' : '' }}>Adicional</option>
@@ -67,7 +52,7 @@
     @endif
 </div>
 <div class="{{ $errors->has('grupo') ? ' has-error' : '' }}">
-	<label for="grupo">Grupo (*)</label>
+	<label for="grupo">Grupo *</label>
 	<select name="grupo" id="grupo" required>
 		<option value="0">Planta funcional (Of)</option>
 	</select>
@@ -77,8 +62,23 @@
         </span>
     @endif
 </div>
+<div class="{{ $errors->has('nivel') ? ' has-error' : '' }}">
+    <label for="nivel">Nivel *</label>
+    <select name="nivel" id="nivel" required>
+        <option value="0" {{ (!empty(old('nivel')) && old('nivel') == 0) ? 'selected' : '' }}>Sin nivel</option>
+        <option value="1" {{ (!empty(old('nivel')) && old('nivel') == 1) ? 'selected' : '' }}>Inicial</option>
+        <option value="2" {{ (!empty(old('nivel')) && old('nivel') == 2) ? 'selected' : '' }}>Primario</option>
+        <option value="3" {{ (!empty(old('nivel')) && old('nivel') == 3) ? 'selected' : '' }}>Medio</option>
+        <option value="4" {{ (!empty(old('nivel')) && old('nivel') == 4) ? 'selected' : '' }}>Superior</option>
+    </select>
+    @if ($errors->has('nivel'))
+        <span class="help-block">
+            <strong>{{ $errors->first('nivel') }}</strong>
+        </span>
+    @endif
+</div>
 <div class="{{ $errors->has('archivo') ? ' has-error' : '' }}">
-	<label for="archivo">Archivo (*)</label>
+	<label for="archivo">Archivo *</label>
 	<input type="file" name="archivo" id="archivo" required>
 	@if ($errors->has('archivo'))
         <span class="help-block">
