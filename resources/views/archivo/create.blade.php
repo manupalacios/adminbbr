@@ -1,28 +1,38 @@
 @extends('layouts/app')
 
-@section('titleHead', 'Subir liquidacion')
+@section('titleHead', 'Subir archivo')
+
+@section('breadcrumb')
+	<li class="breadcrumb-item"><a href="#">Inicio</a></li>
+	<li class="breadcrumb-item active">Subir archivo</li>
+@endsection
 
 @section('content')
 
-	<h3>Subir archivo</h3>
-	<div>
-		<form action="{{ route('archivo.store') }}" method="POST" class="form-horizontal" enctype="multipart/form-data">
-			{{ csrf_field() }}
+	<div class="container-fluid">
+        <div class="row">
+        	<div class="col-md-12">
+            	<div class="card card-primary">
+					<form action="{{ route('archivo.store') }}" method="POST" class="form-horizontal" enctype="multipart/form-data">
+						<div class="card-body">
+							{{ csrf_field() }}
 
-			@include('archivo.fields')
+							@include('archivo.fields')
 
-			@if(Session::has('status'))
-				<div>
-					<input type="checkbox" name="sobreescribir"> {{ Session::get('status') }}
+							@if(Session::has('status'))
+								<div>
+									<input type="checkbox" name="sobreescribir"> {{ Session::get('status') }}
+								</div>
+							@endif
+
+						</div>
+						<div class="card-footer" >
+							<button type="submit" class="btn btn-info">Subir</button>
+						</div>
+					</form>
 				</div>
-			@endif
-
-			<div class="">
-                <div class="">
-                    <button type="submit" class="">Subir</button>
-                </div>
-            </div>
-		</form>
+			</div>
+		</div>
 	</div>
 
 @endsection

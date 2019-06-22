@@ -11,7 +11,7 @@ class ArchivoController extends Controller
 {
     /**
      * Display a listing of the resource.
-     * 
+     *
      * @param bool $saved Si un archivo fue guardada será true
      * @return \Illuminate\Http\Response
      */
@@ -131,7 +131,7 @@ class ArchivoController extends Controller
 
     /**
      * Devuelve un string del tipo de archivo
-     * 
+     *
      * @param  integer $tipo Id del tipo de archivo 1 = normal, 2 = adicional, 3 = sac
      * @return string       Tipo en string
      */
@@ -153,12 +153,11 @@ class ArchivoController extends Controller
 
     /**
      * Devuelve un string del tipo de archivo
-     * 
+     *
      * @param  integer $nivel Id del nivel de archivo 0 = sin_nivel, 1 = inicial, 2 = primario, 3 = medio, 4 = superior
      * @return string       Nivel en string en snake case y lower case
      */
-    private function getNivelToString($nivel)
-    {
+    private function getNivelToString($nivel) {
         switch ($nivel) {
             case 0:
                 $nivel = "sin";
