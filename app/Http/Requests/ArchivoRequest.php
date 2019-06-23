@@ -24,14 +24,22 @@ class ArchivoRequest extends FormRequest
     public function rules()
     {
         $today = today();
-        return [
-            'anio' => 'required|numeric|max:' . $today->year,
-            'mes' => 'required|numeric|min:1|max:12',
-            'nivel' => 'required|numeric|min:0|max:4',
-            'tipo' => 'required|numeric|min:1|max:3',
-            'numero' => $this->numero != null ? 'numeric' : '',
-            'grupo' => 'required|numeric',
-            'archivo' => 'required|mimes:pdf,xls,xlxs|max:15360'
-        ];
+        if ($this->ajax()) {
+            $rules = array(
+                'anio' => 'required|numeric|max:' . $today->year,
+                'grupo' => 'required|numeric'
+            );
+        } else {
+            $rules = array(
+                'anio' => 'required|numeric|max:' . $today->year,
+                'mes' => 'required|numeric|min:1|max:12',
+                'nivel' => 'required|numeric|min:0|max:4',
+                'tipo' => 'required|numeric|min:1|max:3',
+                'numero' => $this->numero != null ? 'numeric' : '',
+                'grupo' => 'required|numeric',
+                'archivo' => 'required|mimes:pdf,xls,xlxs|max:15360'
+            );
+        }
+        return $rules;
     }
 }

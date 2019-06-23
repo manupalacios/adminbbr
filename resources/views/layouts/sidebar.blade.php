@@ -64,7 +64,7 @@
                                         </a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="" class="nav-link">
+                                        <a href="{{ route('archivo.index') }}" class="nav-link">
                                             <i class="fa fa-circle-o nav-icon"></i>
                                             <p>Listado archivos</p>
                                         </a>

@@ -16,3 +16,5 @@ Route::get('/', function () {
 });
 
 Route::resource('archivo', 'ArchivoController');
+
+Route::post('archivo/getArchivos', 'ArchivoController@getArchivos')->name('archivo.getArchivos');

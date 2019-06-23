@@ -33,7 +33,7 @@ class ArchivoController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\ArchivoRequest  $request
      * @return \Illuminate\Http\Response
      */
     public function store(ArchivoRequest $request)
@@ -41,7 +41,7 @@ class ArchivoController extends Controller
         $tipo = $this->getTipoToString($request->tipo);
         $grupo = 'planta';
         $nivel = $this->getNivelToString($request->nivel);
-        $numero = ($request->has('numero')) ? 1 : $request->numero ;
+        $numero = (!empty($request->numero)) ? $request->numero : 1 ;
         $file = $request->file('archivo');
 
         $where = array(
@@ -176,5 +176,23 @@ class ArchivoController extends Controller
                 break;
         }
         return $nivel;
+    }
+
+    /**
+     * Devuelve los archivos de un año y grupo via ajax request
+     *
+     * @param  \App\Http\Requests\ArchivoRequest  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function getArchivos(ArchivoRequest $request)
+    {
+        if ($request->ajax()) {
+            $where = array(
+                'anio' => $request->anio,
+                'grupo_id' => $request->grupo
+            );
+            $archivos = Archivo::where($where)->get();
+            return response()->json($archivos);
+        }
     }
 }

@@ -27,7 +27,7 @@
 
 						</div>
 						<div class="card-footer" >
-							<button type="submit" class="btn btn-info">Subir</button>
+							<button type="submit" class="btn btn-outline-info"><i class="fa fa-upload"></i> Subir</button>
 						</div>
 					</form>
 				</div>

@@ -66,4 +66,6 @@
         <!-- ./wrapper -->
     </body>
 
+    @yield('scripts')
+
 </html>

@@ -75,6 +75,7 @@
                     @endauth
                 @endif
                 <a href="{{ route('archivo.create') }}">Subir archivo</a>
+                <a href="{{ route('archivo.index') }}">Listado liquidaciones</a>
             </div>
 
             <div class="content">
