@@ -1,10 +1,9 @@
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
     <!-- Ionicons -->
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <!-- Font Awesome -->
+    <link href="{{ asset('css/fontawesome.min.css') }}" rel="stylesheet">
     <!-- Theme style -->
     <link href="{{ asset('css/adminlte.min.css') }}" rel="stylesheet">
-    <!-- link href="{{ asset('css/adminlte.min.css') }}" rel="stylesheet" -->
     <!-- DataTables styles -->
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.18/css/dataTables.bootstrap4.min.css"/>
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.5.6/css/buttons.bootstrap4.min.css"/>
@@ -16,4 +15,3 @@
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
     <!-- jQuery v3.3.1-->
     <script src="{{ asset('js/jquery.min.js') }}"></script>
-

@@ -27,7 +27,7 @@
                         with font-awesome or any other icon font library -->
                             <li class="nav-item has-treeview">
                                 <a href="#" class="nav-link">
-                                    <i class="nav-icon fa fa-dashboard"></i>
+                                    <i class="nav-icon far fa-tachometer-alt"></i>
                                     <p>
                                         Panel de control
                                         <i class="right fa fa-angle-left"></i>
@@ -36,7 +36,7 @@
                                 <ul class="nav nav-treeview">
                                     <li class="nav-item">
                                         <a href="#" class="nav-link">
-                                            <i class="fa fa-circle-o nav-icon"></i>
+                                            <i class="far fa-circle nav-icon"></i>
                                             <p>Escritorio</p>
                                         </a>
                                     </li>
@@ -44,7 +44,7 @@
                             </li>
                             <li class="nav-item has-treeview">
                                 <a href="#" class="nav-link">
-                                    <i class="nav-icon fa fa-calendar"></i>
+                                    <i class="nav-icon far fa-calendar-alt"></i>
                                     <p>
                                         Nuevo Per&iacute;odo
                                         <i class="right fa fa-angle-left"></i>
@@ -53,19 +53,13 @@
                                 <ul class="nav nav-treeview">
                                     <li class="nav-item">
                                         <a href="{{ route('archivo.create') }}" class="nav-link">
-                                            <i class="fa fa-circle-o nav-icon"></i>
+                                            <i class="far fa-circle nav-icon"></i>
                                             <p>Subir archivo</p>
                                         </a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="#" class="nav-link">
-                                            <i class="fa fa-circle-o nav-icon"></i>
-                                            <p>Generar per&iacute;odo</p>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
                                         <a href="{{ route('archivo.index') }}" class="nav-link">
-                                            <i class="fa fa-circle-o nav-icon"></i>
+                                            <i class="far fa-circle nav-icon"></i>
                                             <p>Listado archivos</p>
                                         </a>
                                     </li>
