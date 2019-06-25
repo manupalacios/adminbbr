@@ -48,6 +48,8 @@
 							<thead>
 								<tr>
 									<th>Mes</th>
+									<th>Tipo</th>
+									<th>Número</th>
 									<th>Archivo</th>
 									<th>Accion</th>
 								</tr>
@@ -66,7 +68,7 @@
 	<script type="text/javascript">
 		$(document).ready( function () {
 
-			@include('widgets.dataTable', array('tableId' => 'listado', 'indexOrder' => 0))
+			@include('widgets.dataTable', array('tableId' => 'listado', 'indexOrder' => 0, 'directionOrder' => 'desc'))
 			$('#listado').parents('div.dataTables_wrapper').first().hide();
 
 			$("#listar").click(function (e) {
@@ -96,7 +98,19 @@
                     	for (var archivo in archivos) {
 	                    	var date = new Date(anio, archivos[archivo].mes - 1, 1);
 							var mes = date.toLocaleString('{{ app()->getLocale() }}', { month: 'long' });
-                            $("#tableBody").append("<tr><th>" + mes.toUpperCase() + "</th><th>" + archivos[archivo].archivo + "</th><th>" + acciones + "</th></tr>");
+							var tipo = '';
+							switch (archivos[archivo].tipo_id) {
+								case 1:
+									tipo = "NORMAL";
+									break;
+								case 2:
+									tipo = "ADICIONAL";
+									break;
+								case 3:
+									tipo = "SAC";
+									break;
+							}
+                            $("#tableBody").append("<tr><th>" + mes.toUpperCase() + "</th><th>" + tipo + "</th><th>" + archivos[archivo].numero + "</th><th>" + archivos[archivo].archivo + "</th><th>" + acciones + "</th></tr>");
                         }
                         $('#listado').parents('div.dataTables_wrapper').first().slideDown();
                     },

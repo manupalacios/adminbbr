@@ -191,7 +191,11 @@ class ArchivoController extends Controller
                 'anio' => $request->anio,
                 'grupo_id' => $request->grupo
             );
-            $archivos = Archivo::where($where)->get();
+            $archivos = Archivo::where($where)
+                                ->orderBy('mes', 'desc')
+                                ->orderBy('tipo_id', 'asc')
+                                ->orderBy('numero', 'asc')
+                                ->get();
             return response()->json($archivos);
         }
     }
