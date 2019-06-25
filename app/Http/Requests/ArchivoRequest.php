@@ -37,7 +37,7 @@ class ArchivoRequest extends FormRequest
                 'tipo' => 'required|numeric|min:1|max:3',
                 'numero' => $this->numero != null ? 'numeric' : '',
                 'grupo' => 'required|numeric',
-                'archivo' => 'required|mimes:pdf,xls,xlxs|max:15360'
+                'archivo' => 'required|mimes:pdf,xls,xlsx|max:15360'
             );
         }
         return $rules;
