@@ -12,11 +12,9 @@ class ArchivoController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param bool $saved Si un archivo fue guardada será true
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
+    public function index() {
         return view('archivo.index');
     }
 
@@ -25,8 +23,7 @@ class ArchivoController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
+    public function create() {
         return view('archivo.create');
     }
 
@@ -36,8 +33,7 @@ class ArchivoController extends Controller
      * @param  \App\Http\Requests\ArchivoRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(ArchivoRequest $request)
-    {
+    public function store(ArchivoRequest $request) {
         $tipo = $this->getTipoToString($request->tipo);
         $grupo = 'planta';
         $nivel = $this->getNivelToString($request->nivel);
@@ -90,8 +86,7 @@ class ArchivoController extends Controller
      * @param  \App\Models\Archivo  $archivo
      * @return \Illuminate\Http\Response
      */
-    public function show(Archivo $archivo)
-    {
+    public function show(Archivo $archivo) {
         //
     }
 
@@ -101,8 +96,7 @@ class ArchivoController extends Controller
      * @param  \App\Models\Archivo  $archivo
      * @return \Illuminate\Http\Response
      */
-    public function edit(Archivo $archivo)
-    {
+    public function edit(Archivo $archivo) {
         //
     }
 
@@ -113,8 +107,7 @@ class ArchivoController extends Controller
      * @param  \App\Models\Archivo  $archivo
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Archivo $archivo)
-    {
+    public function update(Request $request, Archivo $archivo) {
         //
     }
 
@@ -124,8 +117,7 @@ class ArchivoController extends Controller
      * @param  \App\Models\Archivo  $archivo
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Archivo $archivo)
-    {
+    public function destroy(Archivo $archivo) {
         //
     }
 
@@ -135,8 +127,7 @@ class ArchivoController extends Controller
      * @param  integer $tipo Id del tipo de archivo 1 = normal, 2 = adicional, 3 = sac
      * @return string       Tipo en string
      */
-    private function getTipoToString($tipo)
-    {
+    private function getTipoToString($tipo) {
         switch ($tipo) {
             case 1:
                 $tipo = "normal";
@@ -184,8 +175,7 @@ class ArchivoController extends Controller
      * @param  \App\Http\Requests\ArchivoRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function getArchivos(ArchivoRequest $request)
-    {
+    public function getArchivos(ArchivoRequest $request) {
         if ($request->ajax()) {
             $where = array(
                 'anio' => $request->anio,
@@ -194,5 +184,43 @@ class ArchivoController extends Controller
             $archivos = Archivo::where($where)->get();
             return response()->json($archivos);
         }
+    }
+
+    /**
+     * Importa el archivo a la base de datos.
+     *
+     * @param  \App\Models\Archivo  $archivo
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function import(Archivo $archivo) {
+        $tipo = $this->getTipoToString($archivo->tipo_id);
+        $grupo = 'planta';
+        $nivel = $this->getNivelToString($archivo->nivel_id);
+
+        $path = $tipo.'/'.$grupo.'/'.$nivel.'/'.$archivo->anio.'/'.$archivo->mes.'/'.$archivo->numero.'/'.$archivo->archivo;
+    	$parser = new Parser();
+    	$path = Storage::disk('liquidaciones')->path($path);
+        $pdf = $parser->parseFile($path);
+        $pages  = $pdf->getPages();
+
+        $data['periodo'] = array(
+            'tipo' => $archivo->tipo_id,
+            'nivel' => $archivo->nivel_id,
+            'grupo' => $archivo->grupo_id,
+            'anio' => $archivo->anio,
+            'mes' => $archivo->mes,
+            'numero' => $archivo->numero
+        );
+
+        $pages_array = array();
+		foreach ($pages as $key => $page) {
+            $lines = preg_split('/\r\n|\r|\n/', $page->getText());
+            array_push( $pages_array, $lines );
+        }
+
+        $data['pages'] = $pages_array;
+
+        return view('archivo.import', $data);
     }
 }

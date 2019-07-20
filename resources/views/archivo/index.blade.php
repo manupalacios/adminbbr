@@ -87,13 +87,14 @@
                     success: function (archivos) {
                     	$("#errorAnio").empty();
                     	$("#errorGrupo").empty();
-						$("#tableBody").empty();
+                    	$("#tableBody").empty();
 						$("#row-list").show();
-                    	var btnImportar = '<button type="button" class="btn btn-info btn-sm" title="Importar"><i class=""></i>Importar</button> ';
-                    	var btnBajar = '<button type="button" class="btn btn-info btn-sm" title=""><i class="Bajar"></i>Bajar</button> ';
-                    	var btnEliminar = '<button type="button" class="btn btn-danger btn-sm" title="Eliminar"><i class=""></i>Eliminar</button> ';
-                    	var acciones = btnImportar + btnBajar + btnEliminar;
+						// var url = "{{ url('archivo/import') }}";
                     	for (var archivo in archivos) {
+							var btnImportar = '<form action="{{ url('archivo/import') }}/' + archivos[archivo].id + '" method="POST" class="form-horizontal">{{ csrf_field() }}<button type="submit" class="btn btn-outline-info btn-sm" title="Generar"><i class="far fa-share"></i> </button></form> ';
+							var btnBajar = '<button type="button" class="btn btn-outline-info btn-sm" title="Bajar"><i class="far fa-download"></i> </button> ';
+							var btnEliminar = '<button type="button" class="btn btn-outline-danger btn-sm" title="Eliminar"><i class="far fa-trash-alt"></i> </button> ';
+							var acciones = btnImportar + btnBajar + btnEliminar;
 	                    	var date = new Date(anio, archivos[archivo].mes - 1, 1);
 							var mes = date.toLocaleString('{{ app()->getLocale() }}', { month: 'long' });
                             $("#tableBody").append("<tr><th>" + mes.toUpperCase() + "</th><th>" + archivos[archivo].archivo + "</th><th>" + acciones + "</th></tr>");

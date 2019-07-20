@@ -27,7 +27,7 @@ class LiquidacionDelMes extends Model
      * @var array
      */
     protected $fillable = [
-        'LDMLiqId', 'LDMYear', 'LDMMes', 'LDMTipo', 'LDMNro'
+        'LDMID', 'LDMLiqId', 'LDMYear', 'LDMMes', 'LDMTipo', 'LDMNro', 'LDMNivel'
     ];
 
     /**
@@ -42,7 +42,7 @@ class LiquidacionDelMes extends Model
      * 
      * @var boolean
      */
-    protected $incrementing = false;
+    public $incrementing = false;
 
     /**
      * El tipo de dato de la clave primaria
@@ -50,5 +50,26 @@ class LiquidacionDelMes extends Model
      * @var string
      */
     protected $keyType = 'string';
+
+    /**
+     * @method genId
+     * Genera el id de la liquidacion
+     * EMP_CUIL + ROL(3) + ANIO + MES(2) + GRUPO 
+     *
+     * @param string    $empleado   CUIL del empleado
+     * @param string    $rol        Rol de la liquidacion
+     * @param string    $anio       Rol de la liquidacion
+     * @param string    $mes        Rol de la liquidacion
+     * @param string    $grupo      Rol de la liquidacion
+     *
+     * @return string       El Id de la liquidacion
+     */
+    public static function genId( $empleado, $rol, $anio, $mes, $grupo ) {
+        $rol = str_pad( $rol, 3, '0', STR_PAD_LEFT);
+        $mes = str_pad( $mes, 2, '0', STR_PAD_LEFT);
+
+        return $empleado.$rol.$anio.$mes.$grupo;
+    }
+
 
 }

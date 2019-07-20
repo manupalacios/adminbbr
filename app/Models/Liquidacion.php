@@ -26,28 +26,44 @@ class Liquidacion extends Model
      * @var array
      */
     protected $fillable = [
-        'LiqEMp', 'LiqCargo', 'LiqRol', 'LiqHoras', 'LiqFecAlta', 'LiqFecBaja', 'LiqSit', 'LiqTipo', 'LiqNivel', 'LiqFecBajaOf', 'LiqHorasEst', 'LiqFecAltaRec'
+        'LiqID', 'LiqEmp', 'LiqCargo', 'LiqRol', 'LiqHoras', 'LiqFecAlta', 'LiqFecBaja', 'LiqSit', 'LiqTipo', 'LiqNivel', 'LiqFecBajaOf', 'LiqHorasEst', 'LiqFecAltaRec'
     ];
 
     /**
      * La cable primaria de este model
-     * 
+     *
      * @var string
      */
     protected $primaryKey = 'LiqID';
 
     /**
      * Si la clave primaria es o no autoincrementable
-     * 
+     *
      * @var boolean
      */
-    protected $incrementing = false;
+    public $incrementing = false;
 
     /**
      * El tipo de dato de la clave primaria
-     * 
+     *
      * @var string
      */
     protected $keyType = 'string';
+
+    /**
+     * @method genId
+     * Genera el id de la liquidacion
+     * EMP_CUIL + ROL(3)
+     *
+     * @param string    $empleado   CUIL del empleado
+     * @param string    $rol        Rol de la liquidacion
+     *
+     * @return string       El Id de la liquidacion
+     */
+    public static function genId( $empleado, $rol ) {
+        $rol = str_pad( $rol, 3, '0', STR_PAD_LEFT);
+
+        return $empleado . $rol;
+    }
 
 }
