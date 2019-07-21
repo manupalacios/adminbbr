@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Archivo;
+use App\Models\Parametros;
 use App\Http\Requests\ArchivoRequest;
 use Smalot\PdfParser\Parser;
 use Illuminate\Support\Facades\Storage;
@@ -198,6 +199,15 @@ class ArchivoController extends Controller
         $grupo = 'planta';
         $nivel = $this->getNivelToString($archivo->nivel_id);
 
+        $periodo_id =$archivo->anio. str_pad( $archivo->mes, 2, '0', STR_PAD_LEFT );
+        $periodo = Parametros::find( $periodo_id );
+
+        if( $periodo ){
+            $fecha_liq = $periodo->ParFecLiq;
+        } else {
+            $fecha_liq = '1901-01-01';
+        }
+
         $path = $tipo.'/'.$grupo.'/'.$nivel.'/'.$archivo->anio.'/'.$archivo->mes.'/'.$archivo->numero.'/'.$archivo->archivo;
     	$parser = new Parser();
     	$path = Storage::disk('liquidaciones')->path($path);
@@ -210,13 +220,15 @@ class ArchivoController extends Controller
             'grupo' => $archivo->grupo_id,
             'anio' => $archivo->anio,
             'mes' => $archivo->mes,
-            'numero' => $archivo->numero
+            'numero' => $archivo->numero,
+            'fecha' => $fecha_liq
         );
 
         $pages_array = array();
 		foreach ($pages as $key => $page) {
             $lines = preg_split('/\r\n|\r|\n/', $page->getText());
             array_push( $pages_array, $lines );
+
         }
 
         $data['pages'] = $pages_array;

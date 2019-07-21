@@ -33,8 +33,6 @@
     <label class="control-label" for="tipo">Tipo *</label>
     <select class="form-control {{ $errors->has('tipo') ? ' is-invalid' : '' }}" name="tipo" id="tipo" required>
         <option value="1" {{ (!empty(old('tipo')) && old('tipo') == 1) ? 'selected' : '' }}>Normal</option>
-        <option value="2" {{ (!empty(old('tipo')) && old('tipo') == 2) ? 'selected' : '' }}>Adicional</option>
-        <option value="3" {{ (!empty(old('tipo')) && old('tipo') == 3) ? 'selected' : '' }}>SAC</option>
     </select>
     @if ($errors->has('tipo'))
         <span class="help-block">
@@ -54,7 +52,7 @@
 <div class="form-group" >
     <label class="control-label" for="grupo">Grupo *</label>
     <select class="form-control {{ $errors->has('grupo') ? ' is-invalid' : '' }}" name="grupo" id="grupo" required>
-        <option value="0">Planta funcional (Of)</option>
+        <option value="0">Planta funcional (Oficial)</option>
     </select>
     @if ($errors->has('grupo'))
         <span class="help-block">

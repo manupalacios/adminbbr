@@ -151,7 +151,8 @@ class LiquidacionMesController extends Controller
                     'LiqMesEmp' => $empCUIL,
                     'LiqMesTipo' => $periodo['grupo'],
                     'LiqMesDias' => $arrayLiquidacionMes['dias'],
-                    'LiqMesHoras' => $this->floatToDB( $arrayLiquidacion['horas'] )
+                    'LiqMesHoras' => $this->floatToDB( $arrayLiquidacion['horas'] ),
+                    'LiqMesFec' => $periodo['fecha'],
                 ]
             );
 

@@ -10,14 +10,20 @@
 
 @section('content')
 
-    <div id="progreso"></div>
 	<div class="container-fluid">
         <div class="row">
         	<div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
+                        <div id="progreso"></div>
                         <div class="progress active" style="height: 20px;">
                             <div id="prog" class=".progress-bar bg-success progress-bar-striped" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100">
+                            </div>
+                        </div>
+                        <br />
+                        <div id="text_retry"></div>
+                        <div class="progress active" style="height: 20px;">
+                            <div id="prog_retry" class=".progress-bar bg-warning progress-bar-striped" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100">
                             </div>
                         </div>
                     </div>
@@ -33,25 +39,29 @@
 @section('scripts')
     <script type="text/javascript">
         $(document).ready(function(){
-            var myVar = setInterval(progress, 125);
+
             var periodo = @json($periodo);
             var pages = @json($pages);
-            var qPaginas = Object.keys(pages).length;
+            var paginasTotales = Object.keys(pages).length;
             var progreso = 0;
             var paginasProcesadas = 0;
+            var pbarId = 'prog';
 
             /* Exp. regulares */
             var isSeparator = /^[_ ]+$/;
             var endOfFile = /empleados/i;
             var beginFooter = /_+$/;
 
-            var liquidacionMes, liquidacion, empleado, cargo, inHeader, indexHeader, inFooter, indexFooter, eof;
+            var liquidacionMes, liquidacion, empleado, cargo, inHeader, indexHeader, inFooter, indexFooter, eof, countRequest, countResponse;
+            var errorLiq = new Array();
             eof = false;
+            countRequest = 0;
+            countResponse = 0;
             initializeLiquidacion();
 
             pages.map(( page, index) => {
                 page.map((line, lineIndex) => {
-                    /** skyp first 8 lines */
+                    /** skip first 8 lines */
                     /* parse line */
                     if ( lineIndex > 8) {
                         parseLinePDF( line );
@@ -146,7 +156,9 @@
                     }
                 } else if ( isSeparator.test( line ) ) {
                     /* separador de liquidacion, envio la liquidacion para guardar */
+                    countRequest++;
                     enviarLiquidacion(liquidacionMes);
+                    //ultimaLiquidacion = String(liquidacionMes.liquidacion.empleado.dni) + String(liquidacionMes.liquidacion.rol);
                     initializeLiquidacion();
                 } else if ( beginFooter.test( line ) ){
                     liquidacionMes.descuentos = parseImporteFooter( line );
@@ -290,27 +302,60 @@
                     data: liquidacionMes,
                     success: function (response) {
                         console.log("----------- SUCCESS -----------");
-                        //console.log(response);
+                        progress( pbarId );
+                        countResponse++;
+                        if ( countResponse == countRequest ) {
+                            console.log('----------- FIN -----------');
+                            reintentarErroneos();
+                        }
                     },
                     error: function (errors) {
                         console.log("----------- ERROR -----------");
-                        //console.log(errors);
+                        progress( pbarId );
+                        errorLiq.push( liquidacionMes );
+                        countResponse++;
+                        if ( countResponse == countRequest ) {
+                            console.log('----------- FIN -----------');
+                            reintentarErroneos();
+                        }
                     }
                 })
             }
 
-            function progress() {
-                paginasProcesadas = paginasProcesadas + 1;
-                progreso = (paginasProcesadas * 100) / qPaginas;
-                $("#progreso").empty().text("Procesando " + paginasProcesadas + " paginas (%" + Math.round(progreso) + ") de un total de " + qPaginas);
+            function reintentarErroneos(){
+                ultimaLiquidacion = "";
+                paginasProcesadas = 0;
+                paginasTotales = errorLiq.length;
+                pbarId = 'prog_retry';
+                if ( errorLiq.length > 0 ) {
+                    errorLiq.map((liquidacion, index) => {
+                        enviarLiquidacion(liquidacion);
+                    })
+                }
+            }
 
-                if (paginasProcesadas == qPaginas) {
-                    clearInterval(myVar);
-                    $("#progreso").empty().text("Proceso completo");
+            function progress(progressId) {
+                paginasProcesadas = paginasProcesadas + 1;
+
+                if (paginasProcesadas <= paginasTotales) {
+                    //    $("#progreso").empty().text("Proceso completo");
+                    progreso = (paginasProcesadas * 100) / paginasTotales;
+                    switch ( progressId ) {
+                        case 'prog':
+                            $("#progreso").empty().text("Procesando páginas " + paginasProcesadas + " de " + paginasTotales);
+                            break;
+                        case 'prog_retry':
+                            $("#text_retry").empty().text("Reenviando erroneos " + paginasProcesadas + " de " + paginasTotales);
+                            break;
+                        default:
+                            break;
+                    }
+
+                    let pbar = document.getElementById(progressId);
+                    pbar.style.width = progreso + "%";
+
                 }
 
-                let pbar = document.getElementById('prog');
-                pbar.style.width = progreso + "%";
 
             }
 
