@@ -111,7 +111,7 @@
 									tipo = "SAC";
 									break;
 							}
-                            $("#tableBody").append("<tr><th>" + mes.toUpperCase() + "</th><th>" + tipo + "</th><th>" + archivos[archivo].numero + "</th><th>" + archivos[archivo].archivo + "</th><th>" + acciones + "</th></tr>");
+                            $("#tableBody").append("<tr><td>" + mes.toUpperCase() + "</td><td>" + tipo + "</td><td>" + archivos[archivo].numero + "</td><td>" + archivos[archivo].archivo + "</td><td>" + acciones + "</td></tr>");
                         }
                         $('#listado').parents('div.dataTables_wrapper').first().slideDown();
                     },
