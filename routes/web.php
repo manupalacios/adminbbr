@@ -15,6 +15,19 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+///////////////////
+// Rutas archivo //
+///////////////////
+
+Route::post('archivo/getArchivos', 'ArchivoController@getArchivos')->name('archivo.getArchivos');
+Route::post('archivo/import/{archivo}', 'ArchivoController@import')->name('archivo.import');
+
 Route::resource('archivo', 'ArchivoController');
 
 Route::post('archivo/getArchivos', 'ArchivoController@getArchivos')->name('archivo.getArchivos');
+
+//////////////////////////
+// Rutas liquidacionMes //
+//////////////////////////
+
+Route::resource('liquidacionMes', 'LiquidacionMesController');

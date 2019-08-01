@@ -35,7 +35,7 @@ class EmpleadoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
     }
 
     /**
@@ -82,4 +82,6 @@ class EmpleadoController extends Controller
     {
         //
     }
+
+
 }

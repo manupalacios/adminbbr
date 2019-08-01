@@ -26,26 +26,26 @@ class Concepto extends Model
      * @var array
      */
     protected $fillable = [
-        'ConcepRemun', 'ConcepCalculo', 'ConcepDesc', 'ConcepShort', 'ConcepSalario', 'ConcepNRM931', 'ConcepExtra'
+        'ConcepCod', 'ConcepRemun', 'ConcepCalculo', 'ConcepDesc', 'ConcepShort', 'ConcepSalario', 'ConcepNRM931', 'ConcepExtra'
     ];
 
     /**
      * La cable primaria de este model
-     * 
+     *
      * @var string
      */
     protected $primaryKey = 'ConcepCod';
 
     /**
      * Si la clave primaria es o no autoincrementable
-     * 
+     *
      * @var boolean
      */
-    protected $incrementing = false;
+    public $incrementing = false;
 
     /**
      * El tipo de dato de la clave primaria
-     * 
+     *
      * @var string
      */
     protected $keyType = 'string';

@@ -19,7 +19,7 @@ class LiquidacionMesInterno extends Model
      *
      * @var string
      */
-    protected $table = 'liqmesdeinterno';
+    protected $table = 'liqmesdetinterno';
 
     /**
      * The attributes that are mass assignable.
@@ -27,28 +27,28 @@ class LiquidacionMesInterno extends Model
      * @var array
      */
     protected $fillable = [
-        'LMDILiqMes', 'LMDIConcep', 'LMDIMonto'
+        'LMDIID', 'LMDILiqMes', 'LMDIConcep', 'LMDIMonto'
     ];
 
     /**
      * La cable primaria de este model
-     * 
+     *
      * @var string
      */
     protected $primaryKey = 'LMDIID';
 
     /**
      * Si la clave primaria es o no autoincrementable
-     * 
+     *
      * @var boolean
      */
     protected $incrementing = false;
 
     /**
      * El tipo de dato de la clave primaria
-     * 
+     *
      * @var string
      */
     protected $keyType = 'string';
-    
+
 }
