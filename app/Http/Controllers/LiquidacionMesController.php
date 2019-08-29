@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Cargo;
 use App\Models\Concepto;
 use App\Models\Empleado;
 use App\Models\Liquidacion;
@@ -51,19 +52,24 @@ class LiquidacionMesController extends Controller
             $periodo = $arrayLiquidacionMes['periodo'];
 
             /* Si existe el empleado actualizo fecha de escalafon, si no lo creo */
-            $empleado = Empleado::find($empCUIL);
+            $empleado = Empleado::where( 'EmpNroDoc', $arrayEmpleado['dni'] )->first();
+
             $data['empStatus'] = 'ok';
             $data['liqStatus'] = 'ok';
 
+            /* datos que se actualizan del empleado */
             $empData = array(
                 'EmpFecEscalafon' => $arrayEmpleado['fechaAnti']
             );
 
             if ( empty($empleado ) ){
+                $empCUIL = Empleado::genCUIL($arrayEmpleado['dni'], $arrayEmpleado['genero']);
+                /* datos que se envian en el response */
                 $data['empStatus'] = 'new';
                 $data['empDNI'] = $arrayEmpleado['dni'];
                 $data['empNombre'] = implode(', ', array($arrayEmpleado['apellido'], $arrayEmpleado['nombre']) );
 
+                /* datos para crear el empleado */
                 $empData['EmpCUIL'] = $empCUIL;
                 $empData['EmpNombre'] = strtoupper($arrayEmpleado['nombre']);
                 $empData['EmpApellido'] = strtoupper($arrayEmpleado['apellido']);
@@ -72,6 +78,8 @@ class LiquidacionMesController extends Controller
                 $empData['EmpNacio'] = 1;
                 $empData['EmpFecNac'] = $arrayEmpleado['fechaNac'];
 
+            } else {
+                $empCUIL = $empleado->EmpCUIL;
             }
 
             $empleado = Empleado::updateOrCreate(
@@ -87,26 +95,33 @@ class LiquidacionMesController extends Controller
             $liqId = Liquidacion::genId( $empCUIL, $arrayLiquidacion['rol'] );
             $liquidacion = Liquidacion::find($liqId);
 
+            /* datos que se actualizan de la liquidacion */
+            $liqData = array (
+                'LiqHoras' => $this->floatToDB($arrayLiquidacion['horas']),
+                'LiqSit' => $arrayLiquidacion['situacionRevista'],
+            );
+
             if( empty($liquidacion) ){
+                /* datos que se envian en el response */
                 $data['liqStatus'] = 'new';
                 $data['liqDNI'] = $arrayEmpleado['dni'];
                 $data['liqNombre'] = implode(', ', array($arrayEmpleado['apellido'], $arrayEmpleado['nombre']) );
                 $data['liqRol'] = $arrayLiquidacion['rol'];
+
+                /* datos para crear la liquidacion */
+                $liqData['LiqID'] = $liqId;
+                $liqData['LiqEmp'] = $empCUIL;
+                $liqData['LiqRol'] = $arrayLiquidacion['rol'];
+                $liqData['LiqCargo'] = $arrayLiquidacion['cargo'];
+                $liqData['LiqFecAlta'] = $arrayLiquidacion['fechaAlta'];
+                $liqData['LiqTipo'] = $periodo['grupo'] == 0 ? 2 : $periodo['grupo'];
+                $cargo = Cargo::find($arrayLiquidacion['cargo']);
+                $liqData['LiqNivel'] = $cargo->CargoNivel;
+
             }
 
             $liquidacion = Liquidacion::updateOrCreate(
-                [
-                    'LiqID' => $liqId
-                ], [
-                    'LiqID' => $liqId,
-                    'LiqEmp' => $empCUIL,
-                    'LiqRol' => $arrayLiquidacion['rol'],
-                    'LiqCargo' => $arrayLiquidacion['cargo'],
-                    'LiqHoras' => $this->floatToDB($arrayLiquidacion['horas']),
-                    'LiqFecAlta' => $arrayLiquidacion['fechaAlta'],
-                    'LiqSit' => $arrayLiquidacion['situacionRevista'],
-                    'LiqTipo' => $periodo['grupo']
-                ]
+                [ 'LiqID' => $liqId ], $liqData
             );
 
             if ( empty($liquidacion ) ){
@@ -149,7 +164,7 @@ class LiquidacionMesController extends Controller
                     'LiqMesSalario' => $this->floatToDB($arrayLiquidacionMes['salario']),
                     'LiqMesSit' => $arrayLiquidacion['situacionRevista'],
                     'LiqMesEmp' => $empCUIL,
-                    'LiqMesTipo' => $periodo['grupo'],
+                    'LiqMesTipo' => $periodo['grupo'] == 0 ? 2 : $periodo['grupo'],
                     'LiqMesDias' => $arrayLiquidacionMes['dias'],
                     'LiqMesHoras' => $this->floatToDB( $arrayLiquidacion['horas'] ),
                     'LiqMesFec' => $periodo['fecha'],

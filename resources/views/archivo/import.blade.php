@@ -197,6 +197,7 @@
 
                 let cargo = line.substring( (line.indexOf('Rol') + 4) );
                 cargo = cargo.substring( cargo.indexOf(' ') + 1, cargo.indexOf(' ') + 6 );
+                cargo = cargo.substring(0, 2) + '-' + cargo.substring(2);
 
                 let dias = line.substring( (line.indexOf('EE12601530') - 2), line.indexOf('EE12601530') ).trim();
 

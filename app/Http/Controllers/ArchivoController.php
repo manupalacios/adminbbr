@@ -233,6 +233,10 @@ class ArchivoController extends Controller
             $lines = preg_split('/\r\n|\r|\n/', $page->getText());
             array_push( $pages_array, $lines );
 
+            if ( count($pages_array) > 5 ){
+                break;
+            }
+
         }
 
         $data['pages'] = $pages_array;
