@@ -31,21 +31,21 @@ class Cargo extends Model
 
     /**
      * La cable primaria de este model
-     * 
+     *
      * @var string
      */
     protected $primaryKey = 'CargoCod';
 
     /**
      * Si la clave primaria es o no autoincrementable
-     * 
+     *
      * @var boolean
      */
-    protected $incrementing = false;
+    public $incrementing = false;
 
     /**
      * El tipo de dato de la clave primaria
-     * 
+     *
      * @var string
      */
     protected $keyType = 'string';

@@ -13,21 +13,69 @@
 	<div class="container-fluid">
         <div class="row">
         	<div class="col-md-12">
-                <div class="card">
+                <div class="card card-info card-outline">
                     <div class="card-header">
-                        <div id="progreso"></div>
-                        <div class="progress active" style="height: 20px;">
-                            <div id="prog" class=".progress-bar bg-success progress-bar-striped" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100">
-                            </div>
-                        </div>
-                        <br />
-                        <div id="text_retry"></div>
-                        <div class="progress active" style="height: 20px;">
-                            <div id="prog_retry" class=".progress-bar bg-warning progress-bar-striped" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100">
-                            </div>
-                        </div>
+                        <h3 class="card-title">
+                            <i class="far fa-cog fa-spin"> </i> Procesando liquidaciones
+                        </h3>
                     </div>
                     <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm-6 col-md-3">
+                                <div class="info-box">
+                                    <span class="info-box-icon bg-info elevation-1"><i class="far fa-share"></i></span>
+                                    <div class="info-box-content">
+                                        <span class="info-box-text">Enviadas</span>
+                                        <span class="info-box-number" id="count_request">0
+                                        </span>
+                                    </div>
+                                    <!-- /.info-box-content -->
+                                </div>
+                                <!-- /.info-box -->
+                            </div>
+                            <div class="col-sm-6 col-md-3">
+                                <div class="info-box">
+                                    <span class="info-box-icon bg-info elevation-1"><i class="far fa-reply"></i></span>
+                                    <div class="info-box-content">
+                                        <span class="info-box-text">Procesadas</span>
+                                        <span class="info-box-number" id="count_response">0
+                                        </span>
+                                    </div>
+                                    <!-- /.info-box-content -->
+                                </div>
+                                <!-- /.info-box -->
+                            </div>
+                            <div class="col-sm-6 col-md-3">
+                                <div class="info-box">
+                                    <span class="info-box-icon bg-success elevation-1"><i class="far fa-thumbs-up"></i></span>
+                                    <div class="info-box-content">
+                                        <span class="info-box-text">Correctas</span>
+                                        <span class="info-box-number" id="count_success">0
+                                        </span>
+                                    </div>
+                                    <!-- /.info-box-content -->
+                                </div>
+                                <!-- /.info-box -->
+                            </div>
+                            <div class="col-sm-6 col-md-3">
+                                <div class="info-box">
+                                    <span class="info-box-icon bg-danger elevation-1"><i class="far fa-thumbs-down"></i></span>
+                                    <div class="info-box-content">
+                                        <span class="info-box-text">Erroneas</span>
+                                        <span class="info-box-number" id="count_error">0
+                                        </span>
+                                    </div>
+                                    <!-- /.info-box-content -->
+                                </div>
+                                <!-- /.info-box -->
+                            </div>
+                        </div>
+                        <!-- /.row -->
+                        <div id="text_retry"></div>
+                        <div class="progress active" style="height: 20px;">
+                            <div id="prog_retry" class=".progress-bar bg-primary progress-bar-striped" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100">
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -52,11 +100,16 @@
             var endOfFile = /empleados/i;
             var beginFooter = /_+$/;
 
-            var liquidacionMes, liquidacion, empleado, cargo, inHeader, indexHeader, inFooter, indexFooter, eof, countRequest, countResponse;
+            var liquidacionMes, liquidacion, empleado, cargo, inHeader, indexHeader, inFooter, indexFooter, eof;
+            var countRequest, countResponse, countSuccess, countError, processAll;
             var errorLiq = new Array();
             eof = false;
             countRequest = 0;
             countResponse = 0;
+            countSuccess = 0;
+            countError = 0;
+            processAll = false;
+
             initializeLiquidacion();
 
             pages.map(( page, index) => {
@@ -157,8 +210,8 @@
                 } else if ( isSeparator.test( line ) ) {
                     /* separador de liquidacion, envio la liquidacion para guardar */
                     countRequest++;
+                    updateCounters();
                     enviarLiquidacion(liquidacionMes);
-                    //ultimaLiquidacion = String(liquidacionMes.liquidacion.empleado.dni) + String(liquidacionMes.liquidacion.rol);
                     initializeLiquidacion();
                 } else if ( beginFooter.test( line ) ){
                     liquidacionMes.descuentos = parseImporteFooter( line );
@@ -302,21 +355,21 @@
                     },
                     data: liquidacionMes,
                     success: function (response) {
-                        console.log("----------- SUCCESS -----------");
                         progress( pbarId );
                         countResponse++;
-                        if ( countResponse == countRequest ) {
-                            console.log('----------- FIN -----------');
+                        countSuccess++;
+                        updateCounters();
+                        if ( (countResponse == countRequest) && (countRequest != 0) ) {
                             reintentarErroneos();
                         }
                     },
                     error: function (errors) {
-                        console.log("----------- ERROR -----------");
                         progress( pbarId );
                         errorLiq.push( liquidacionMes );
                         countResponse++;
-                        if ( countResponse == countRequest ) {
-                            console.log('----------- FIN -----------');
+                        countError++;
+                        updateCounters();
+                        if ( (countResponse == countRequest) && (countRequest != 0) ) {
                             reintentarErroneos();
                         }
                     }
@@ -324,12 +377,16 @@
             }
 
             function reintentarErroneos(){
-                ultimaLiquidacion = "";
                 paginasProcesadas = 0;
+                processAll = true;
                 paginasTotales = errorLiq.length;
                 pbarId = 'prog_retry';
-                if ( errorLiq.length > 0 ) {
-                    errorLiq.map((liquidacion, index) => {
+                countRequest = errorLiq.length;
+                let erroneos = errorLiq;
+                errorLiq = new Array();
+                countResponse = 0;
+                if ( erroneos.length > 0 ) {
+                    erroneos.map((liquidacion, index) => {
                         enviarLiquidacion(liquidacion);
                     })
                 }
@@ -342,22 +399,25 @@
                     //    $("#progreso").empty().text("Proceso completo");
                     progreso = (paginasProcesadas * 100) / paginasTotales;
                     switch ( progressId ) {
-                        case 'prog':
-                            $("#progreso").empty().text("Procesando páginas " + paginasProcesadas + " de " + paginasTotales);
-                            break;
                         case 'prog_retry':
                             $("#text_retry").empty().text("Reenviando erroneos " + paginasProcesadas + " de " + paginasTotales);
+                            let pbar = document.getElementById(progressId);
+                            pbar.style.width = progreso + "%";
                             break;
                         default:
                             break;
                     }
 
-                    let pbar = document.getElementById(progressId);
-                    pbar.style.width = progreso + "%";
 
                 }
+            }
 
-
+            function updateCounters(){
+                if ( processAll ) return;
+                $("#count_request").text( countRequest );
+                $("#count_response").text( countResponse );
+                $("#count_success").text( countSuccess );
+                $("#count_error").text( countError );
             }
 
         });

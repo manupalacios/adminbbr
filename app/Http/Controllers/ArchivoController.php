@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Archivo;
+use App\Models\LiquidacionDelMes;
+use App\Models\LiquidacionMes;
+use App\Models\LiquidacionMesDetalle;
 use App\Models\Parametros;
 use App\Http\Requests\ArchivoRequest;
 use Smalot\PdfParser\Parser;
@@ -228,15 +231,23 @@ class ArchivoController extends Controller
             'fecha' => $fecha_liq
         );
 
+        /* elimino las liquidaciones existentes */
+        /* detalles */
+        $liq_tipo = $archivo->grupo_id == 0 ? 2 : $archivo->grupo_id;
+        $detalles = LiquidacionMesDetalle::join('liquidacionmes', 'liquidacionmes.LiqMesID', '=', 'liqmesdetalle.LMDLiqMes')
+            ->where('liquidacionmes.LiqMesAnio', '=', $archivo->anio )->where('liquidacionmes.LiqMesMes', '=', $archivo->mes )
+            ->where('liquidacionmes.LiqMesTipo', '=', $liq_tipo )->delete();
+        /* liquidacionmes */
+        $liquidaciones_mes = LiquidacionMes::where('LiqMesAnio', '=', $archivo->anio )
+            ->where('LiqMesMes', '=', $archivo->mes )->where('LiqMesTipo', '=', $liq_tipo )->delete();
+        /* liqdelmes */
+        $liquidaciones_del_mes = LiquidacionDelMes::where('LDMYear', '=', $archivo->anio )
+            ->where('LDMMes', '=', $archivo->mes )->where('LDMTipo', '=', $archivo->grupo_id )->where('LDMNro', '=', $archivo->numero )->delete();
+
         $pages_array = array();
 		foreach ($pages as $key => $page) {
             $lines = preg_split('/\r\n|\r|\n/', $page->getText());
             array_push( $pages_array, $lines );
-
-            if ( count($pages_array) > 5 ){
-                break;
-            }
-
         }
 
         $data['pages'] = $pages_array;
