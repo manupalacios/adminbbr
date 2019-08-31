@@ -359,7 +359,7 @@
                         countResponse++;
                         countSuccess++;
                         updateCounters();
-                        if ( (countResponse == countRequest) && (countRequest != 0) ) {
+                        if ( countResponse == countRequest ){
                             reintentarErroneos();
                         }
                     },
@@ -369,7 +369,7 @@
                         countResponse++;
                         countError++;
                         updateCounters();
-                        if ( (countResponse == countRequest) && (countRequest != 0) ) {
+                        if ( countResponse == countRequest ){
                             reintentarErroneos();
                         }
                     }
@@ -389,6 +389,8 @@
                     erroneos.map((liquidacion, index) => {
                         enviarLiquidacion(liquidacion);
                     })
+                } else {
+                    toastr.success('Período generado correctamente');
                 }
             }
 

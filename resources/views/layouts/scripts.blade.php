@@ -8,6 +8,8 @@
         <!--script src="../../plugins/fastclick/fastclick.js"></script-->
         <!-- AdminLTE App -->
         <script src="{{ asset('js/adminlte.js') }}"></script>
+        <!-- Toastr -->
+        <script src="{{ asset('plugins/toastr/toastr.min.js') }}"></script>
 
         <!-- Scripts -->
         <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
