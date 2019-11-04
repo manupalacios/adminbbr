@@ -39,8 +39,7 @@ class LiquidacionMesController extends Controller
      * @param  \App\Http\Requests\LiquidacionMesRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(LiquidacionMesRequest $request)
-    {
+    public function store(LiquidacionMesRequest $request) {
         if ($request->ajax()) {
 
             $arrayLiquidacionMes = $request->all();
@@ -116,7 +115,7 @@ class LiquidacionMesController extends Controller
                 $liqData['LiqFecAlta'] = $arrayLiquidacion['fechaAlta'];
                 $liqData['LiqTipo'] = $periodo['grupo'] == 0 ? 2 : $periodo['grupo'];
                 $cargo = Cargo::find($arrayLiquidacion['cargo']);
-                $liqData['LiqNivel'] = $cargo->CargoNivel;
+                $liqData['LiqNivel'] = $periodo['nivel'] == 0 ? $cargo->CargoNivel : $periodo['nivel'];
 
             }
 
@@ -162,6 +161,7 @@ class LiquidacionMesController extends Controller
                     'LiqMesNoRemunera' => $this->floatToDB($arrayLiquidacionMes['noSujeto']),
                     'LiqMesDescuento' => $this->floatToDB($arrayLiquidacionMes['descuentos']),
                     'LiqMesSalario' => $this->floatToDB($arrayLiquidacionMes['salario']),
+                    'LiqMesNivel' => $periodo['nivel'],
                     'LiqMesSit' => $arrayLiquidacion['situacionRevista'],
                     'LiqMesEmp' => $empCUIL,
                     'LiqMesTipo' => $periodo['grupo'] == 0 ? 2 : $periodo['grupo'],
@@ -199,7 +199,7 @@ class LiquidacionMesController extends Controller
         }
     }
 
-    private function floatToDB( $float ){
+    private function floatToDB( $float ) {
        return str_replace(',', '.', $float);
     }
 

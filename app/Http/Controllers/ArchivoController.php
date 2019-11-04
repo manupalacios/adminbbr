@@ -206,7 +206,7 @@ class ArchivoController extends Controller
         $grupo = 'planta';
         $nivel = $this->getNivelToString($archivo->nivel_id);
 
-        $periodo_id =$archivo->anio. str_pad( $archivo->mes, 2, '0', STR_PAD_LEFT );
+        $periodo_id = $archivo->anio . str_pad( $archivo->mes, 2, '0', STR_PAD_LEFT );
         $periodo = Parametros::find( $periodo_id );
 
         if( $periodo ){
@@ -236,13 +236,15 @@ class ArchivoController extends Controller
         $liq_tipo = $archivo->grupo_id == 0 ? 2 : $archivo->grupo_id;
         $detalles = LiquidacionMesDetalle::join('liquidacionmes', 'liquidacionmes.LiqMesID', '=', 'liqmesdetalle.LMDLiqMes')
             ->where('liquidacionmes.LiqMesAnio', '=', $archivo->anio )->where('liquidacionmes.LiqMesMes', '=', $archivo->mes )
-            ->where('liquidacionmes.LiqMesTipo', '=', $liq_tipo )->delete();
+            ->where('liquidacionmes.LiqMesTipo', '=', $liq_tipo )->where('liquidacionmes.LiqMesNivel', '=', $archivo->nivel_id )
+            ->delete();
         /* liquidacionmes */
         $liquidaciones_mes = LiquidacionMes::where('LiqMesAnio', '=', $archivo->anio )
-            ->where('LiqMesMes', '=', $archivo->mes )->where('LiqMesTipo', '=', $liq_tipo )->delete();
+            ->where('LiqMesMes', '=', $archivo->mes )->where('LiqMesTipo', '=', $liq_tipo )->where('LiqMesNivel', '=', $archivo->nivel_id )->delete();
         /* liqdelmes */
-        $liquidaciones_del_mes = LiquidacionDelMes::where('LDMYear', '=', $archivo->anio )
-            ->where('LDMMes', '=', $archivo->mes )->where('LDMTipo', '=', $archivo->grupo_id )->where('LDMNro', '=', $archivo->numero )->delete();
+        $liquidaciones_del_mes = LiquidacionDelMes::where('LDMYear', '=', $archivo->anio )->where('LDMMes', '=', $archivo->mes )
+            ->where('LDMTipo', '=', $archivo->grupo_id )->where('LDMNro', '=', $archivo->numero )->where('LDMNivel', '=', $archivo->nivel_id )
+            ->delete();
 
         $pages_array = array();
 		foreach ($pages as $key => $page) {

@@ -16,7 +16,9 @@
                 <div class="card card-info card-outline">
                     <div class="card-header">
                         <h3 class="card-title">
-                            <i class="far fa-cog fa-spin"> </i> Procesando liquidaciones
+                            <span id="process_icon">
+                                <i class="far fa-cog fa-spin"> </i> Procesando liquidaciones
+                            </span>
                         </h3>
                     </div>
                     <div class="card-body">
@@ -391,6 +393,7 @@
                     })
                 } else {
                     toastr.success('Período generado correctamente');
+                    $("#process_icon").html('<i class="far fa-check-circle"> </i> Liquidaciones procesadas');
                 }
             }
 
