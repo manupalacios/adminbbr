@@ -95,9 +95,11 @@ class LiquidacionMesController extends Controller
             $liquidacion = Liquidacion::find($liqId);
 
             /* datos que se actualizan de la liquidacion */
+            $cargo = Cargo::find($arrayLiquidacion['cargo']);
             $liqData = array (
                 'LiqHoras' => $this->floatToDB($arrayLiquidacion['horas']),
                 'LiqSit' => $arrayLiquidacion['situacionRevista'],
+                'LiqNivel' => $periodo['nivel'] == 0 ? $cargo->CargoNivel : $periodo['nivel'],
             );
 
             if( empty($liquidacion) ){
@@ -114,7 +116,6 @@ class LiquidacionMesController extends Controller
                 $liqData['LiqCargo'] = $arrayLiquidacion['cargo'];
                 $liqData['LiqFecAlta'] = $arrayLiquidacion['fechaAlta'];
                 $liqData['LiqTipo'] = $periodo['grupo'] == 0 ? 2 : $periodo['grupo'];
-                $cargo = Cargo::find($arrayLiquidacion['cargo']);
                 $liqData['LiqNivel'] = $periodo['nivel'] == 0 ? $cargo->CargoNivel : $periodo['nivel'];
 
             }

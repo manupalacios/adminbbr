@@ -50,7 +50,7 @@
 									<th>Mes</th>
 									<th>Tipo</th>
 									<th>Número</th>
-									<th>Archivo</th>
+									<th>Nivel</th>
 									<th>Accion</th>
 								</tr>
 							</thead>
@@ -66,12 +66,12 @@
 
 @section('scripts')
 	<script type="text/javascript">
-		$(document).ready( function () {
+		$(document).ready( function() {
 
 			@include('widgets.dataTable', array('tableId' => 'listado', 'indexOrder' => 0, 'directionOrder' => 'desc'))
 			$('#listado').parents('div.dataTables_wrapper').first().hide();
 
-			$("#listar").click(function (e) {
+			$("#listar").click(function( event ) {
 				$("#status").hide();
 				var anio = $("#anio").val();
 				var grupo = $("#grupo").val();
@@ -86,36 +86,30 @@
                         'X-CSRF-TOKEN': '{{ csrf_token() }}'
                     },
                     data: request,
-                    success: function (archivos) {
-                    	$("#errorAnio").empty();
-                    	$("#errorGrupo").empty();
-                    	$("#tableBody").empty();
+                    success: function( archivos ) {
+						const tipos = ['', 'NORMAL', 'ADICIONAL', 'SAC'];
+						const niveles = ['TODOS', 'INICIAL', 'PRIMARIO', 'MEDIO', 'SUPERIOR'];
+
+						$("#errorAnio").empty();
+						$("#errorGrupo").empty();
+						$("#tableBody").empty();
 						$("#row-list").show();
-						// var url = "{{ url('archivo/import') }}";
-                    	for (var archivo in archivos) {
-							var btnImportar = '<form action="{{ url('archivo/import') }}/' + archivos[archivo].id + '" method="POST" class="form-horizontal">{{ csrf_field() }}<button type="submit" class="btn btn-outline-info btn-sm" title="Generar"><i class="far fa-share"></i> </button></form> ';
-							var btnBajar = '<button type="button" class="btn btn-outline-info btn-sm" title="Bajar"><i class="far fa-download"></i> </button> ';
-							var btnEliminar = '<button type="button" class="btn btn-outline-danger btn-sm" title="Eliminar"><i class="far fa-trash-alt"></i> </button> ';
-							var acciones = btnImportar + btnBajar + btnEliminar;
-	                    	var date = new Date(anio, archivos[archivo].mes - 1, 1);
-							var mes = date.toLocaleString('{{ app()->getLocale() }}', { month: 'long' });
-							var tipo = '';
-							switch (archivos[archivo].tipo_id) {
-								case 1:
-									tipo = "NORMAL";
-									break;
-								case 2:
-									tipo = "ADICIONAL";
-									break;
-								case 3:
-									tipo = "SAC";
-									break;
-							}
-                            $("#tableBody").append("<tr><td>" + mes.toUpperCase() + "</td><td>" + tipo + "</td><td>" + archivos[archivo].numero + "</td><td>" + archivos[archivo].archivo + "</td><td>" + acciones + "</td></tr>");
-                        }
+
+						archivos.forEach( archivo => {
+							let btnImportar = '<form action="{{ url('archivo/import') }}/' + archivo.id + '" method="POST" class="form-horizontal">{{ csrf_field() }}<button type="submit" class="btn btn-outline-info btn-sm" title="Generar"><i class="far fa-share"></i> </button></form> ';
+							let btnBajar = '<button type="button" class="btn btn-outline-info btn-sm" title="Bajar"><i class="far fa-download"></i> </button> ';
+							let btnEliminar = '<button type="button" class="btn btn-outline-danger btn-sm" title="Eliminar"><i class="far fa-trash-alt"></i> </button> ';
+							let acciones = btnImportar + btnBajar + btnEliminar;
+	                    	let date = new Date(anio, archivo.mes - 1, 1);
+							let mes = date.toLocaleString('{{ app()->getLocale() }}', { month: 'long' });
+							let tipo = tipos[ archivo.tipo_id ];
+							let nivel = niveles[ archivo.nivel_id ];
+                            $("#tableBody").append("<tr><td>" + mes.toUpperCase() + "</td><td>" + tipo + "</td><td>" + archivo.numero + "</td><td>" + nivel + "</td><td>" + acciones + "</td></tr>");
+						});
+
                         $('#listado').parents('div.dataTables_wrapper').first().slideDown();
                     },
-                    error: function (data) {
+                    error: function( data ) {
                         var errors = data.responseJSON.errors;
                         if (errors.anio) {
 							$("#anio").addClass("is-invalid");

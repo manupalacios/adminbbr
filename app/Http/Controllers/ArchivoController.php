@@ -128,8 +128,8 @@ class ArchivoController extends Controller
     /**
      * Devuelve un string del tipo de archivo
      *
-     * @param  integer $tipo Id del tipo de archivo 1 = normal, 2 = adicional, 3 = sac
-     * @return string       Tipo en string
+     * @param  integer  $tipo Id del tipo de liquidacion [1 = normal, 2 = adicional, 3 = sac]
+     * @return string   Nombre del tipo de liquidacion
      */
     private function getTipoToString($tipo) {
         switch ($tipo) {
@@ -147,10 +147,10 @@ class ArchivoController extends Controller
     }
 
     /**
-     * Devuelve un string del tipo de archivo
+     * Devuelve el string que representa la abreviatura del nivel
      *
-     * @param  integer $nivel Id del nivel de archivo 0 = sin_nivel, 1 = inicial, 2 = primario, 3 = medio, 4 = superior
-     * @return string       Nivel en string en snake case y lower case
+     * @param  integer  $nivel Id del nivel de archivo [0 = sin_nivel, 1 = inicial, 2 = primario, 3 = medio, 4 = superior]
+     * @return string   Abreviatura del nivel
      */
     private function getNivelToString($nivel) {
         switch ($nivel) {
