@@ -142,7 +142,8 @@ class LiquidacionMesController extends Controller
                     'LDMMes' => $periodo['mes'],
                     'LDMTipo' => $periodo['grupo'],
                     'LDMNro' => $periodo['numero'],
-                    'LDMNivel' => $periodo['nivel']
+                    'LDMNivel' => $periodo['nivel'],
+                    'LDMClase' => $periodo['tipo'],
                 ]
             );
 
@@ -166,6 +167,7 @@ class LiquidacionMesController extends Controller
                     'LiqMesSit' => $arrayLiquidacion['situacionRevista'],
                     'LiqMesEmp' => $empCUIL,
                     'LiqMesTipo' => $periodo['grupo'] == 0 ? 2 : $periodo['grupo'],
+                    'LiqMesClase' => $periodo['tipo'],
                     'LiqMesDias' => $arrayLiquidacionMes['dias'],
                     'LiqMesHoras' => $this->floatToDB( $arrayLiquidacion['horas'] ),
                     'LiqMesFec' => $periodo['fecha'],

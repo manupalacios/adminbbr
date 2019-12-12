@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class LiquidacionDelMes extends Model
 {
-    
+
     /**
      * Indicates if the model should be timestamped.
      *
@@ -27,26 +27,26 @@ class LiquidacionDelMes extends Model
      * @var array
      */
     protected $fillable = [
-        'LDMID', 'LDMLiqId', 'LDMYear', 'LDMMes', 'LDMTipo', 'LDMNro', 'LDMNivel'
+        'LDMID', 'LDMLiqId', 'LDMYear', 'LDMMes', 'LDMTipo', 'LDMNro', 'LDMNivel', 'LDMClase'
     ];
 
     /**
      * La cable primaria de este model
-     * 
+     *
      * @var string
      */
     protected $primaryKey = 'LDMID';
 
     /**
      * Si la clave primaria es o no autoincrementable
-     * 
+     *
      * @var boolean
      */
     public $incrementing = false;
 
     /**
      * El tipo de dato de la clave primaria
-     * 
+     *
      * @var string
      */
     protected $keyType = 'string';
@@ -54,7 +54,7 @@ class LiquidacionDelMes extends Model
     /**
      * @method genId
      * Genera el id de la liquidacion
-     * EMP_CUIL + ROL(3) + ANIO + MES(2) + GRUPO 
+     * EMP_CUIL + ROL(3) + ANIO + MES(2) + GRUPO
      *
      * @param string    $empleado   CUIL del empleado
      * @param string    $rol        Rol de la liquidacion
