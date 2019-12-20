@@ -31,27 +31,6 @@ class LiquidacionMes extends Model
     ];
 
     /**
-     * La cable primaria de este model
-     *
-     * @var string
-     */
-    protected $primaryKey = 'LiqMesID';
-
-    /**
-     * Si la clave primaria es o no autoincrementable
-     *
-     * @var boolean
-     */
-    public $incrementing = false;
-
-    /**
-     * El tipo de dato de la clave primaria
-     *
-     * @var string
-     */
-    protected $keyType = 'string';
-
-    /**
      * @method genId
      * Genera el id de la liquidacion
      * EMP_CUIL + ROL(3) + ANIO + MES(2)

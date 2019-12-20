@@ -134,7 +134,8 @@ class LiquidacionMesController extends Controller
             $liqDelMesId = LiquidacionDelMes::genId( $empCUIL, $arrayLiquidacion['rol'], $periodo['anio'], $periodo['mes'], $periodo['grupo'] );
             $liquidacionDelMes = LiquidacionDelMes::updateOrCreate(
                 [
-                    'LDMID' => $liqDelMesId
+                    'LDMID' => $liqDelMesId,
+                    'LDMClase' => $periodo['tipo'],
                 ], [
                     'LDMID' => $liqDelMesId,
                     'LDMLiqId' => $liqId,
@@ -152,7 +153,8 @@ class LiquidacionMesController extends Controller
 
             $liquidacionMes = LiquidacionMes::updateOrCreate(
                 [
-                    'LiqMesID' => $liqMesId
+                    'LiqMesID' => $liqMesId,
+                    'LiqMesClase' => $periodo['tipo'],
                 ], [
                     'LiqMesID' => $liqMesId,
                     'LiqMesLiq' => $liqId,
@@ -175,7 +177,8 @@ class LiquidacionMesController extends Controller
             );
 
             /* Elimino todos los conceptos */
-            $deletedRows = LiquidacionMesDetalle::where('LMDLiqMes', $liqMesId)->delete();
+            $deletedRows = LiquidacionMesDetalle::where('LMDLiqMes', '=', $liqMesId)
+                ->where('LMDClase', '=', $periodo['tipo'] )->delete();
 
             /* Creo el detalle */
             foreach ($liqDetalle as $item) {
@@ -190,6 +193,7 @@ class LiquidacionMesController extends Controller
 
                 $detalle = new LiquidacionMesDetalle;
                 $detalle->LMDID = LiquidacionMesDetalle::genId($empCUIL, $arrayLiquidacion['rol'], $periodo['anio'], $periodo['mes'], $item['codigo']);
+                $detalle->LMDClase = $periodo['tipo'];
                 $detalle->LMDLiqMes = $liqMesId;
                 $detalle->LMDLiqConcep = $item['codigo'];
                 $detalle->LMDMonto = $this->floatToDB( $item['importe'] );

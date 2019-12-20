@@ -132,18 +132,15 @@ class ArchivoController extends Controller
      * @return string   Nombre del tipo de liquidacion
      */
     private function getTipoToString($tipo) {
-        switch ($tipo) {
-            case 1:
-                $tipo = "normal";
-                break;
-            case 2:
-                $tipo = "adicional";
-                break;
-            case 3:
-                $tipo = "sac";
-                break;
-        }
-        return $tipo;
+
+        $tipos = array(
+            '',
+            'normal',
+            'adicional',
+            'sac'
+        );
+        return $tipos[ $tipo ];
+
     }
 
     /**
@@ -153,24 +150,16 @@ class ArchivoController extends Controller
      * @return string   Abreviatura del nivel
      */
     private function getNivelToString($nivel) {
-        switch ($nivel) {
-            case 0:
-                $nivel = "sin";
-                break;
-            case 1:
-                $nivel = "ini";
-                break;
-            case 2:
-                $nivel = "pri";
-                break;
-            case 3:
-                $nivel = "med";
-                break;
-            case 4:
-                $nivel = "sup";
-                break;
-        }
-        return $nivel;
+
+        $niveles = array(
+            'sin',
+            'ini',
+            'pri',
+            'med',
+            'sup'
+        );
+        return $niveles[ $nivel ];
+
     }
 
     /**
@@ -234,16 +223,21 @@ class ArchivoController extends Controller
         /* elimino las liquidaciones existentes */
         /* detalles */
         $liq_tipo = $archivo->grupo_id == 0 ? 2 : $archivo->grupo_id;
-        $detalles = LiquidacionMesDetalle::join('liquidacionmes', 'liquidacionmes.LiqMesID', '=', 'liqmesdetalle.LMDLiqMes')
+        /*$detalles = LiquidacionMesDetalle::join('liquidacionmes', 'liquidacionmes.LiqMesID', '=', 'liqmesdetalle.LMDLiqMes')
             ->where('liquidacionmes.LiqMesAnio', '=', $archivo->anio )->where('liquidacionmes.LiqMesMes', '=', $archivo->mes )
             ->where('liquidacionmes.LiqMesTipo', '=', $liq_tipo )->where('liquidacionmes.LiqMesNivel', '=', $archivo->nivel_id )
-            ->delete();
+            ->where('liquidacionmes.LiqMesClase', '=', $archivo->tipo_id)
+            ->delete();*/
         /* liquidacionmes */
         $liquidaciones_mes = LiquidacionMes::where('LiqMesAnio', '=', $archivo->anio )
-            ->where('LiqMesMes', '=', $archivo->mes )->where('LiqMesTipo', '=', $liq_tipo )->where('LiqMesNivel', '=', $archivo->nivel_id )->delete();
+            ->where('LiqMesMes', '=', $archivo->mes )->where('LiqMesTipo', '=', $liq_tipo )
+            ->where('LiqMesNivel', '=', $archivo->nivel_id )->where('LiqMesClase', '=', $archivo->tipo_id)
+            ->delete();
         /* liqdelmes */
-        $liquidaciones_del_mes = LiquidacionDelMes::where('LDMYear', '=', $archivo->anio )->where('LDMMes', '=', $archivo->mes )
-            ->where('LDMTipo', '=', $archivo->grupo_id )->where('LDMNro', '=', $archivo->numero )->where('LDMNivel', '=', $archivo->nivel_id )
+        $liquidaciones_del_mes = LiquidacionDelMes::where('LDMYear', '=', $archivo->anio )
+            ->where('LDMMes', '=', $archivo->mes )->where('LDMClase', '=', $archivo->tipo_id)
+            ->where('LDMTipo', '=', $archivo->grupo_id )->where('LDMNro', '=', $archivo->numero )
+            ->where('LDMNivel', '=', $archivo->nivel_id )
             ->delete();
 
         $pages_array = array();

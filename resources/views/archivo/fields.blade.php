@@ -32,7 +32,8 @@
 <div class="form-group" >
     <label class="control-label" for="tipo">Tipo *</label>
     <select class="form-control {{ $errors->has('tipo') ? ' is-invalid' : '' }}" name="tipo" id="tipo" required>
-        <option value="1" {{ (!empty(old('tipo')) && old('tipo') == 1) ? 'selected' : '' }}>Normal</option>
+        <option value="1" {{ (!empty(old('tipo')) && old('tipo') == 1) ? 'selected' : '' }}>Regular</option>
+        <option value="3" {{ (!empty(old('tipo')) && old('tipo') == 3) ? 'selected' : '' }}>Aguinaldo</option>
     </select>
     @if ($errors->has('tipo'))
         <span class="help-block">

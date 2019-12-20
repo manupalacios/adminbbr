@@ -27,29 +27,8 @@ class LiquidacionMesDetalle extends Model
      * @var array
      */
     protected $fillable = [
-        'LMDID', 'LMDLiqMes', 'LMDLiqConcep', 'LMDMonto', 'LMDOrden', 'LMDRemun'
+        'LMDID', 'LDMClase', 'LMDLiqMes', 'LMDLiqConcep', 'LMDMonto', 'LMDOrden', 'LMDRemun'
     ];
-
-    /**
-     * La cable primaria de este model
-     *
-     * @var string
-     */
-    protected $primaryKey = 'LMDID';
-
-    /**
-     * Si la clave primaria es o no autoincrementable
-     *
-     * @var boolean
-     */
-    public $incrementing = false;
-
-    /**
-     * El tipo de dato de la clave primaria
-     *
-     * @var string
-     */
-    protected $keyType = 'string';
 
     /**
      * @method genId
