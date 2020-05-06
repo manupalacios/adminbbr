@@ -27,7 +27,7 @@ class LiquidacionMes extends Model
      * @var array
      */
     protected $fillable = [
-        'LiqMesID', 'LiqMesLiq', 'LiqMesMes', 'LiqMesAnio', 'LiqMesLiquido', 'LiqMesRemunera', 'LiqMesNoRemunera', 'LiqMesDescuento', 'LiqMesSalario', 'LiqMesNivel', 'LiqMesSit', 'LiqMesFec', 'LiqMesEmp', 'LiqMesTipo', 'LiqMesClase', 'LiqMesDias', 'LiqMesHoras'
+        'LiqMesID', 'LiqMesLiq', 'LiqMesMes', 'LiqMesAnio', 'LiqMesLiquido', 'LiqMesRemunera', 'LiqMesNoRemunera', 'LiqMesDescuento', 'LiqMesSalario', 'LiqMesNivel', 'LiqMesSit', 'LiqMesFec', 'LiqMesEmp', 'LiqMesTipo', 'LiqMesClase', 'LiqMesDias', 'LiqMesHoras', 'LiqMesNro'
     ];
 
     /**

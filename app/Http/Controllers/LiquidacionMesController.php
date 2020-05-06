@@ -136,6 +136,7 @@ class LiquidacionMesController extends Controller
                 [
                     'LDMID' => $liqDelMesId,
                     'LDMClase' => $periodo['tipo'],
+                    'LDMNro' => $periodo['numero'],
                 ], [
                     'LDMID' => $liqDelMesId,
                     'LDMLiqId' => $liqId,
@@ -155,6 +156,7 @@ class LiquidacionMesController extends Controller
                 [
                     'LiqMesID' => $liqMesId,
                     'LiqMesClase' => $periodo['tipo'],
+                    'LiqMesNro' => $periodo['numero'],
                 ], [
                     'LiqMesID' => $liqMesId,
                     'LiqMesLiq' => $liqId,
@@ -173,6 +175,7 @@ class LiquidacionMesController extends Controller
                     'LiqMesDias' => $arrayLiquidacionMes['dias'],
                     'LiqMesHoras' => $this->floatToDB( $arrayLiquidacion['horas'] ),
                     'LiqMesFec' => $periodo['fecha'],
+                    'LiqMesNro' => $periodo['numero'],
                 ]
             );
 
@@ -199,6 +202,7 @@ class LiquidacionMesController extends Controller
                 $detalle->LMDMonto = $this->floatToDB( $item['importe'] );
                 $detalle->LMDOrden = 0;
                 $detalle->LMDRemun = $concepto->ConcepRemun;
+                $detalle->LMDNro = $periodo['numero'];
                 $detalle->save();
             }
 
