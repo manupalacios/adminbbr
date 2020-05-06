@@ -27,7 +27,7 @@ class LiquidacionMesDetalle extends Model
      * @var array
      */
     protected $fillable = [
-        'LMDID', 'LMDClase', 'LMDLiqMes', 'LMDLiqConcep', 'LMDMonto', 'LMDOrden', 'LMDRemun'. 'LMDNro'
+        'LMDID', 'LMDClase', 'LMDLiqMes', 'LMDLiqConcep', 'LMDMonto', 'LMDOrden', 'LMDRemun', 'LMDNro'
     ];
 
     /**
