@@ -99,7 +99,6 @@ class LiquidacionMesController extends Controller
             $liqData = array (
                 'LiqHoras' => $this->floatToDB($arrayLiquidacion['horas']),
                 'LiqSit' => $arrayLiquidacion['situacionRevista'],
-                'LiqNivel' => $periodo['nivel'] == 0 ? $cargo->CargoNivel : $periodo['nivel'],
             );
 
             if( empty($liquidacion) ){
