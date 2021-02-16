@@ -19,7 +19,7 @@ class Periodo extends Model
      *
      * @var string
      */
-    protected $table = 'periodo';
+    protected $table = 'periodos';
 
     /**
      * The attributes that are mass assignable.
@@ -27,28 +27,7 @@ class Periodo extends Model
      * @var array
      */
     protected $fillable = [
-        'PerDesc'
+        'anio', 'mes', 'grupo', 'tipo', 'nivel', 'numero', 'fecha', 'observaciones'
     ];
 
-    /**
-     * La cable primaria de este model
-     * 
-     * @var string
-     */
-    protected $primaryKey = 'PerId';
-
-    /**
-     * Si la clave primaria es o no autoincrementable
-     * 
-     * @var boolean
-     */
-    protected $incrementing = false;
-
-    /**
-     * El tipo de dato de la clave primaria
-     * 
-     * @var string
-     */
-    protected $keyType = 'string';
-    
 }

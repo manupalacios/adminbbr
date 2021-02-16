@@ -6,7 +6,7 @@ use App\Models\Archivo;
 use App\Models\LiquidacionDelMes;
 use App\Models\LiquidacionMes;
 use App\Models\LiquidacionMesDetalle;
-use App\Models\Parametros;
+use App\Models\Periodo;
 use App\Http\Requests\ArchivoRequest;
 use Smalot\PdfParser\Parser;
 use Illuminate\Support\Facades\Storage;
@@ -195,11 +195,16 @@ class ArchivoController extends Controller
         $grupo = 'planta';
         $nivel = $this->getNivelToString($archivo->nivel_id);
 
-        $periodo_id = $archivo->anio . str_pad( $archivo->mes, 2, '0', STR_PAD_LEFT );
-        $periodo = Parametros::find( $periodo_id );
+        $periodo = Periodo::where('anio', $archivo->anio)
+                            ->where('mes', $archivo->mes)
+                            ->where('grupo', $archivo->grupo_id)
+                            ->where('tipo', $archivo->tipo_id)
+                            ->where('numero', $archivo->numero)
+                            ->where('nivel', 0)
+                            ->first();
 
         if( $periodo ){
-            $fecha_liq = $periodo->ParFecLiq;
+            $fecha_liq = $periodo->fecha;
         } else {
             $fecha_liq = '1901-01-01';
         }
