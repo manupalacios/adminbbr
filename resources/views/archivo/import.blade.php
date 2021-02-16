@@ -342,9 +342,12 @@
 
                 let impEnd = line.indexOf(',') + 3;
                 let imp1 = line.substring(0, impEnd).trim();
-                let imp2 = line.substring(impEnd).match(/\d+,\d{2}/);
-
-                return [imp1, imp2[0]];
+                let importes = line.substring(impEnd).match(/\d+,\d{2}/);
+                let imp2 = 0;
+                if( importes ){
+                    imp2 = importes[0];
+                }
+                return [imp1, imp2];
 
             }
 
